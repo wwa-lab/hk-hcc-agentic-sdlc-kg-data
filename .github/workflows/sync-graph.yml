@@ -113,4 +113,15 @@ jobs:
           fi
 
           git commit -m "Sync graph artifacts for ${PROFILE}/${PROJECT_ID}"
-          git push
+
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+
+            echo "Push failed on attempt ${attempt}; rebasing onto latest origin/main before retry."
+            git pull --rebase origin main
+          done
+
+          echo "Unable to push graph artifacts after retrying." >&2
+          exit 1
