@@ -1,7 +1,7 @@
-# Agentic SDLC Knowledge Graph Data
+# HK-HCC Agentic SDLC Knowledge Graph Data
 
 This repository stores deterministic structured artifacts generated from the
-Agentic SDLC SDD Markdown repository.
+HK-HCC Agentic SDLC SDD Markdown repository.
 
 ## Repository Role
 
@@ -30,14 +30,14 @@ Agentic SDLC SDD Markdown repository.
 ## Sync From SDD Repo
 
 ```bash
-npm run sync -- --source ../agentic-sdlc-sdd --workspace ws-default-001 --application agentic-sdlc-control-tower
+npm run sync -- --source ../hk-hcc-agentic-sdlc-sdd --workspace ws-default-001 --application agentic-sdlc-control-tower
 ```
 
 Optional identifiers:
 
 ```bash
 npm run sync -- \
-  --source ../agentic-sdlc-sdd \
+  --source ../hk-hcc-agentic-sdlc-sdd \
   --workspace ws-default-001 \
   --application agentic-sdlc-control-tower \
   --project proj-42 \

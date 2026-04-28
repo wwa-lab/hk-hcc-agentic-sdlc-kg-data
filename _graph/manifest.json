@@ -1,14 +1,14 @@
 {
   "schemaVersion": "1.0",
-  "runId": "skg-sync-20260428T085445",
-  "generatedAt": "2026-04-28T08:54:45.122Z",
+  "runId": "skg-sync-20260428T092357",
+  "generatedAt": "2026-04-28T09:23:57.515Z",
   "workspaceId": "ws-default-001",
   "applicationId": "agentic-sdlc-control-tower",
   "snowGroup": null,
   "projectId": null,
   "profileId": "standard-sdd",
-  "branch": "develop-leo-requirment",
-  "sourceCommitSha": "f44c462306a38590e59392fe072c4f75353a55a1",
+  "branch": "main",
+  "sourceCommitSha": "15a7f7fa5a675efa040e483dac1308286418c015",
   "artifacts": {
     "nodes": "_graph/nodes.jsonl",
     "edges": "_graph/edges.jsonl",
@@ -24,11 +24,11 @@
   },
   "stale": false,
   "lastSync": {
-    "runId": "skg-sync-20260428T085445",
+    "runId": "skg-sync-20260428T092357",
     "status": "COMPLETED",
-    "sourceCommitSha": "f44c462306a38590e59392fe072c4f75353a55a1",
+    "sourceCommitSha": "15a7f7fa5a675efa040e483dac1308286418c015",
     "structuredCommitSha": null,
-    "startedAt": "2026-04-28T08:54:45.122Z",
-    "completedAt": "2026-04-28T08:54:45.122Z"
+    "startedAt": "2026-04-28T09:23:57.515Z",
+    "completedAt": "2026-04-28T09:23:57.515Z"
   }
 }
