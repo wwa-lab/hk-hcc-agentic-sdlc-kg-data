@@ -1,0 +1,116 @@
+name: Sync Graph Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: SDD profile to sync.
+        required: true
+        default: ibm-i
+        type: choice
+        options:
+          - ibm-i
+          - standard-sdd
+      project_id:
+        description: Project ID under docs/{profile}/projects/{project_id}.
+        required: true
+        default: hk-hcc-core
+      source_branch:
+        description: Branch in hk-hcc-agentic-sdlc-sdd to read.
+        required: true
+        default: main
+      workspace_id:
+        description: Workspace scope for generated graph metadata.
+        required: true
+        default: ws-default-001
+      application_id:
+        description: Application scope for generated graph metadata.
+        required: true
+        default: hk-hcc
+      snow_group:
+        description: Optional SNOW group scope.
+        required: false
+        default: HK-HCC
+  repository_dispatch:
+    types:
+      - sdd-graph-sync
+
+permissions:
+  contents: write
+
+concurrency:
+  group: graph-sync-${{ github.event.inputs.profile || github.event.client_payload.profile || 'ibm-i' }}-${{ github.event.inputs.project_id || github.event.client_payload.project_id || 'unscoped' }}-${{ github.event.inputs.source_branch || github.event.client_payload.source_branch || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      PROFILE: ${{ github.event.inputs.profile || github.event.client_payload.profile || 'ibm-i' }}
+      PROJECT_ID: ${{ github.event.inputs.project_id || github.event.client_payload.project_id || 'hk-hcc-core' }}
+      SOURCE_BRANCH: ${{ github.event.inputs.source_branch || github.event.client_payload.source_branch || 'main' }}
+      WORKSPACE_ID: ${{ github.event.inputs.workspace_id || github.event.client_payload.workspace_id || 'ws-default-001' }}
+      APPLICATION_ID: ${{ github.event.inputs.application_id || github.event.client_payload.application_id || 'hk-hcc' }}
+      SNOW_GROUP: ${{ github.event.inputs.snow_group || github.event.client_payload.snow_group || '' }}
+
+    steps:
+      - name: Checkout KG data repo
+        uses: actions/checkout@v4
+        with:
+          path: kg-data
+
+      - name: Checkout SDD repo
+        uses: actions/checkout@v4
+        with:
+          repository: wwa-lab/hk-hcc-agentic-sdlc-sdd
+          ref: ${{ env.SOURCE_BRANCH }}
+          path: sdd
+          token: ${{ secrets.SDD_READ_TOKEN || secrets.KG_SYNC_TOKEN || github.token }}
+
+      - name: Sync graph artifacts
+        working-directory: kg-data
+        run: |
+          set -euo pipefail
+
+          source_path="../sdd/docs/${PROFILE}/projects/${PROJECT_ID}"
+          output_path="_graph/${PROFILE}/${PROJECT_ID}"
+
+          if [ ! -d "$source_path" ]; then
+            echo "Source project path does not exist: $source_path" >&2
+            exit 1
+          fi
+
+          args=(
+            node scripts/sdd-graph-sync.mjs
+            --source "$source_path"
+            --out "$output_path"
+            --profile "$PROFILE"
+            --workspace "$WORKSPACE_ID"
+            --application "$APPLICATION_ID"
+            --project "$PROJECT_ID"
+            --branch "$SOURCE_BRANCH"
+          )
+
+          if [ -n "$SNOW_GROUP" ]; then
+            args+=(--snow-group "$SNOW_GROUP")
+          fi
+
+          "${args[@]}"
+
+      - name: Commit graph artifacts
+        working-directory: kg-data
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "_graph/${PROFILE}/${PROJECT_ID}"
+
+          if git diff --cached --quiet; then
+            echo "No graph artifact changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Sync graph artifacts for ${PROFILE}/${PROJECT_ID}"
+          git push

@@ -32,6 +32,9 @@ HK-HCC Agentic SDLC SDD Markdown repository.
 │           └── suggestions.jsonl
 ├── runs/
 ├── schema/
+├── .github/
+│   └── workflows/
+│       └── sync-graph.yml
 └── scripts/
     └── sdd-graph-sync.mjs
 ```
@@ -99,3 +102,33 @@ without `project_id` inherit the command-line `--project` value.
 `issues.jsonl` should be reviewed before importing into Neo4j. Error-level
 issues mean the projection is useful for debugging but should not be promoted as
 trusted graph truth.
+
+## GitHub Actions Sync
+
+The repository also exposes a GitHub Actions workflow for hosted sync:
+
+- Manual trigger: open **Actions** -> **Sync Graph Artifacts** -> **Run workflow**.
+- Page/backend trigger: call the GitHub Actions `workflow_dispatch` API for
+  `.github/workflows/sync-graph.yml` with the same inputs.
+- Automatic trigger: the SDD repo sends a `repository_dispatch` event whenever
+  `docs/**` changes on `main`.
+
+Workflow inputs:
+
+- `profile`: `standard-sdd` or `ibm-i`
+- `project_id`: project folder under `docs/{profile}/projects/`
+- `source_branch`: SDD branch to read, usually `main`
+- `workspace_id`: graph workspace scope
+- `application_id`: application scope
+- `snow_group`: optional SNOW group scope
+
+Required repository setup:
+
+- In this repo, add `SDD_READ_TOKEN` if the SDD repository is private. Use a
+  fine-grained token with read access to `wwa-lab/hk-hcc-agentic-sdlc-sdd`
+  contents.
+- The default `GITHUB_TOKEN` commits generated `_graph/` artifacts back to this
+  repository, so this repo's workflow permission must allow write access.
+- If an application page triggers the sync, its backend token needs Actions
+  write permission on this repository and should call the workflow dispatch
+  endpoint rather than writing graph files directly.
