@@ -1,14 +1,14 @@
 {
   "schemaVersion": "1.0",
-  "runId": "skg-sync-20260428T100003",
-  "generatedAt": "2026-04-28T10:00:03.684Z",
+  "runId": "skg-sync-20260428T100917",
+  "generatedAt": "2026-04-28T10:09:17.423Z",
   "workspaceId": "ws-default-001",
-  "applicationId": "hk-hcc",
-  "snowGroup": "HK-HCC",
+  "applicationId": "agentic-sdlc-control-tower",
+  "snowGroup": null,
   "projectId": null,
-  "profileId": "ibm-i",
+  "profileId": "standard-sdd",
   "branch": "main",
-  "sourceCommitSha": "a61024e7e8ca4536bba87bc8c43a0b15db416ea4",
+  "sourceCommitSha": "d84abc650961ed9cc79d60ad88ed1bb391988b05",
   "artifacts": {
     "nodes": "_graph/nodes.jsonl",
     "edges": "_graph/edges.jsonl",
@@ -24,11 +24,11 @@
   },
   "stale": false,
   "lastSync": {
-    "runId": "skg-sync-20260428T100003",
+    "runId": "skg-sync-20260428T100917",
     "status": "COMPLETED",
-    "sourceCommitSha": "a61024e7e8ca4536bba87bc8c43a0b15db416ea4",
+    "sourceCommitSha": "d84abc650961ed9cc79d60ad88ed1bb391988b05",
     "structuredCommitSha": null,
-    "startedAt": "2026-04-28T10:00:03.684Z",
-    "completedAt": "2026-04-28T10:00:03.684Z"
+    "startedAt": "2026-04-28T10:09:17.423Z",
+    "completedAt": "2026-04-28T10:09:17.423Z"
   }
 }

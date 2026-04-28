@@ -60,7 +60,10 @@ if (!profile) {
 }
 
 const files = findMarkdownFiles(sourceRoot).filter(file => !file.includes(`${sep()}_graph${sep()}`));
-const documents = files.map(readDocument).filter(Boolean);
+const documents = files
+  .map(readDocument)
+  .filter(Boolean)
+  .filter(doc => !doc.frontmatter.profile || doc.frontmatter.profile === profileId);
 const docIds = new Set(documents.map(doc => doc.frontmatter.doc_id));
 const duplicateIds = duplicates(documents.map(doc => doc.frontmatter.doc_id).filter(Boolean));
 

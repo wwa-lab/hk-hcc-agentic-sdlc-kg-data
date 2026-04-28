@@ -58,6 +58,10 @@ The sync writes:
 - `_graph/issues.jsonl`
 - `_graph/suggestions.jsonl`
 
+When a source repository contains multiple profiles, the sync includes documents
+with matching `profile` front matter and skips documents that explicitly belong
+to another profile.
+
 ## Artifact Contract
 
 - `nodes.jsonl`: one graph node per line.
