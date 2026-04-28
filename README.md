@@ -44,6 +44,12 @@ npm run sync -- \
   --snow-group "SDLC Platform"
 ```
 
+For HK-HCC IBM i validation:
+
+```bash
+npm run sync:ibm-i
+```
+
 The sync writes:
 
 - `_graph/manifest.json`
