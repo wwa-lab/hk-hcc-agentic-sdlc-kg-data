@@ -1,0 +1,10 @@
+{
+  "name": "agentic-sdlc-kg-data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sdd-graph-sync.mjs --out _graph",
+    "sync:sdd": "node scripts/sdd-graph-sync.mjs --source ../agentic-sdlc-sdd --out _graph --workspace ws-default-001 --application agentic-sdlc-control-tower"
+  }
+}
