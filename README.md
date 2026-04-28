@@ -16,11 +16,20 @@ HK-HCC Agentic SDLC SDD Markdown repository.
 ```text
 .
 ├── _graph/
-│   ├── manifest.json
-│   ├── nodes.jsonl
-│   ├── edges.jsonl
-│   ├── issues.jsonl
-│   └── suggestions.jsonl
+│   ├── standard-sdd/
+│   │   └── control-tower/
+│   │       ├── manifest.json
+│   │       ├── nodes.jsonl
+│   │       ├── edges.jsonl
+│   │       ├── issues.jsonl
+│   │       └── suggestions.jsonl
+│   └── ibm-i/
+│       └── hk-hcc-core/
+│           ├── manifest.json
+│           ├── nodes.jsonl
+│           ├── edges.jsonl
+│           ├── issues.jsonl
+│           └── suggestions.jsonl
 ├── runs/
 ├── schema/
 └── scripts/
@@ -38,6 +47,7 @@ Optional identifiers:
 ```bash
 npm run sync -- \
   --source ../hk-hcc-agentic-sdlc-sdd/docs/standard-sdd/projects/control-tower \
+  --out _graph/standard-sdd/control-tower \
   --workspace ws-default-001 \
   --application agentic-sdlc-control-tower \
   --profile standard-sdd \
@@ -51,6 +61,7 @@ For a new project, point `--source` at that project folder and pass the same
 ```bash
 npm run sync -- \
   --source ../hk-hcc-agentic-sdlc-sdd/docs/ibm-i/projects/new-project \
+  --out _graph/ibm-i/new-project \
   --profile ibm-i \
   --workspace ws-default-001 \
   --application hk-hcc \
@@ -64,13 +75,13 @@ For HK-HCC IBM i validation:
 npm run sync:ibm-i
 ```
 
-The sync writes:
+Each sync writes a project-scoped artifact set:
 
-- `_graph/manifest.json`
-- `_graph/nodes.jsonl`
-- `_graph/edges.jsonl`
-- `_graph/issues.jsonl`
-- `_graph/suggestions.jsonl`
+- `_graph/{profile}/{project}/manifest.json`
+- `_graph/{profile}/{project}/nodes.jsonl`
+- `_graph/{profile}/{project}/edges.jsonl`
+- `_graph/{profile}/{project}/issues.jsonl`
+- `_graph/{profile}/{project}/suggestions.jsonl`
 
 When a source repository contains multiple profiles or projects, the sync
 includes documents with matching `profile` front matter and, when `--project`

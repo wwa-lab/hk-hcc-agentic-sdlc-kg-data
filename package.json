@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "sync": "node scripts/sdd-graph-sync.mjs --out _graph",
-    "sync:sdd": "node scripts/sdd-graph-sync.mjs --source ../hk-hcc-agentic-sdlc-sdd/docs/standard-sdd/projects/control-tower --out _graph --profile standard-sdd --workspace ws-default-001 --application agentic-sdlc-control-tower --project control-tower",
-    "sync:ibm-i": "node scripts/sdd-graph-sync.mjs --source ../hk-hcc-agentic-sdlc-sdd/docs/ibm-i/projects/hk-hcc-core --out _graph --profile ibm-i --workspace ws-default-001 --application hk-hcc --project hk-hcc-core --snow-group HK-HCC"
+    "sync:sdd": "node scripts/sdd-graph-sync.mjs --source ../hk-hcc-agentic-sdlc-sdd/docs/standard-sdd/projects/control-tower --out _graph/standard-sdd/control-tower --profile standard-sdd --workspace ws-default-001 --application agentic-sdlc-control-tower --project control-tower",
+    "sync:ibm-i": "node scripts/sdd-graph-sync.mjs --source ../hk-hcc-agentic-sdlc-sdd/docs/ibm-i/projects/hk-hcc-core --out _graph/ibm-i/hk-hcc-core --profile ibm-i --workspace ws-default-001 --application hk-hcc --project hk-hcc-core --snow-group HK-HCC"
   }
 }

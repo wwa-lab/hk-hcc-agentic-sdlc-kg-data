@@ -2,7 +2,7 @@
 
 ## Node
 
-Each line in `_graph/nodes.jsonl` is a JSON object:
+Each line in `_graph/{profile}/{project}/nodes.jsonl` is a JSON object:
 
 ```json
 {
@@ -12,9 +12,10 @@ Each line in `_graph/nodes.jsonl` is a JSON object:
   "properties": {
     "docType": "requirement",
     "requirementId": "REQ-001",
-    "path": "docs/01-requirements/example-requirements.md",
+    "path": "01-requirements/example-requirements.md",
     "workspaceId": "ws-default-001",
     "applicationId": "agentic-sdlc-control-tower",
+    "projectId": "control-tower",
     "profile": "standard-sdd",
     "branch": "main"
   }
@@ -23,7 +24,7 @@ Each line in `_graph/nodes.jsonl` is a JSON object:
 
 ## Edge
 
-Each line in `_graph/edges.jsonl` is a JSON object:
+Each line in `_graph/{profile}/{project}/edges.jsonl` is a JSON object:
 
 ```json
 {
@@ -34,6 +35,7 @@ Each line in `_graph/edges.jsonl` is a JSON object:
   "evidence": "frontmatter",
   "properties": {
     "profile": "standard-sdd",
+    "projectId": "control-tower",
     "branch": "main",
     "reason": "Stories refine requirements."
   }
@@ -42,7 +44,7 @@ Each line in `_graph/edges.jsonl` is a JSON object:
 
 ## Issue
 
-Each line in `_graph/issues.jsonl` is a JSON object:
+Each line in `_graph/{profile}/{project}/issues.jsonl` is a JSON object:
 
 ```json
 {
@@ -55,6 +57,7 @@ Each line in `_graph/issues.jsonl` is a JSON object:
   "properties": {
     "workspaceId": "ws-default-001",
     "applicationId": "agentic-sdlc-control-tower",
+    "projectId": "control-tower",
     "profile": "standard-sdd",
     "branch": "main"
   }

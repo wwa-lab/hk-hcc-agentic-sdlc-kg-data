@@ -13,14 +13,15 @@ for (let i = 2; i < process.argv.length; i += 1) {
   }
 }
 
-const sourceRoot = resolve(args.get('source') ?? '.');
-const outputRoot = resolve(args.get('out') ?? join(sourceRoot, '_graph'));
 const profileId = args.get('profile') ?? 'standard-sdd';
+const projectId = args.get('project') ?? null;
+const sourceRoot = resolve(args.get('source') ?? '.');
+const outputRoot = resolve(args.get('out') ?? join('_graph', profileId, projectId ?? 'unscoped'));
+const artifactRoot = normalizePath(relative(process.cwd(), outputRoot)) || '.';
 const branch = args.get('branch') ?? git(['rev-parse', '--abbrev-ref', 'HEAD'], sourceRoot, 'unknown');
 const workspaceId = args.get('workspace') ?? 'ws-default';
 const applicationId = args.get('application') ?? null;
 const snowGroup = args.get('snow-group') ?? null;
-const projectId = args.get('project') ?? null;
 
 const profiles = {
   'standard-sdd': {
@@ -146,10 +147,10 @@ const manifest = {
   branch,
   sourceCommitSha: git(['rev-parse', 'HEAD'], sourceRoot, null),
   artifacts: {
-    nodes: '_graph/nodes.jsonl',
-    edges: '_graph/edges.jsonl',
-    issues: '_graph/issues.jsonl',
-    suggestions: '_graph/suggestions.jsonl',
+    nodes: artifactPath('nodes.jsonl'),
+    edges: artifactPath('edges.jsonl'),
+    issues: artifactPath('issues.jsonl'),
+    suggestions: artifactPath('suggestions.jsonl'),
   },
   counts: { documents: documents.length, nodes: uniqueById(nodes).length, edges: uniqueById(edges).length, issues: issues.length, suggestions: suggestions.length },
   stale: false,
@@ -369,6 +370,14 @@ function duplicates(values) {
 function writeJsonl(path, rows) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, rows.map(row => JSON.stringify(row)).join('\n') + (rows.length ? '\n' : ''));
+}
+
+function artifactPath(file) {
+  return artifactRoot === '.' ? file : `${artifactRoot}/${file}`;
+}
+
+function normalizePath(path) {
+  return path.split(sep()).join('/');
 }
 
 function git(command, cwd, fallback) {
