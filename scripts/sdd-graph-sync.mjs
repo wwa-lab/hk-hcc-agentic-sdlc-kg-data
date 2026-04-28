@@ -63,7 +63,8 @@ const files = findMarkdownFiles(sourceRoot).filter(file => !file.includes(`${sep
 const documents = files
   .map(readDocument)
   .filter(Boolean)
-  .filter(doc => !doc.frontmatter.profile || doc.frontmatter.profile === profileId);
+  .filter(doc => !doc.frontmatter.profile || doc.frontmatter.profile === profileId)
+  .filter(doc => !projectId || !doc.frontmatter.project_id || doc.frontmatter.project_id === projectId);
 const docIds = new Set(documents.map(doc => doc.frontmatter.doc_id));
 const duplicateIds = duplicates(documents.map(doc => doc.frontmatter.doc_id).filter(Boolean));
 
@@ -85,21 +86,21 @@ for (const doc of documents) {
       id: sourceId,
       kind: 'SOURCE_REF',
       label: ref.title ?? ref.url ?? ref.external_id ?? 'Source Reference',
-      properties: scoped({ sourceType: ref.type, url: ref.url, externalId: ref.external_id, docId: doc.frontmatter.doc_id }),
+      properties: scoped({ sourceType: ref.type, url: ref.url, externalId: ref.external_id, docId: doc.frontmatter.doc_id }, doc),
     });
-    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'REFERENCES', sourceId, 'frontmatter', { profile: profileId, branch }));
+    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'REFERENCES', sourceId, 'frontmatter', scoped({}, doc)));
   }
   for (const program of arrayValue(doc.frontmatter.entities?.programs)) {
     const programName = program.name ?? program;
     const programId = `program:${programName}`;
-    nodes.push({ id: programId, kind: 'PROGRAM', label: programName, properties: scoped(typeof program === 'object' ? program : { name: programName }) });
-    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'COVERS', programId, 'frontmatter', { entityType: 'program', profile: profileId, branch }));
+    nodes.push({ id: programId, kind: 'PROGRAM', label: programName, properties: scoped(typeof program === 'object' ? program : { name: programName }, doc) });
+    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'COVERS', programId, 'frontmatter', scoped({ entityType: 'program' }, doc)));
   }
   for (const file of arrayValue(doc.frontmatter.entities?.files)) {
     const fileName = file.name ?? file;
     const fileId = `file:${fileName}`;
-    nodes.push({ id: fileId, kind: 'FILE', label: fileName, properties: scoped(typeof file === 'object' ? file : { name: fileName }) });
-    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'COVERS', fileId, 'frontmatter', { entityType: 'file', profile: profileId, branch }));
+    nodes.push({ id: fileId, kind: 'FILE', label: fileName, properties: scoped(typeof file === 'object' ? file : { name: fileName }, doc) });
+    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'COVERS', fileId, 'frontmatter', scoped({ entityType: 'file' }, doc)));
   }
 }
 
@@ -117,7 +118,7 @@ for (const doc of documents) {
     if (target && !profile.dependencyPairs.has(`${doc.frontmatter.doc_type}->${target.frontmatter.doc_type}`)) {
       issues.push(issue('WARNING', 'UNUSUAL_DEPENDENCY_PAIR', `${doc.frontmatter.doc_type} -> ${target.frontmatter.doc_type} is not a standard ${profileId} pair`, `doc:${doc.frontmatter.doc_id}`));
     }
-    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'DEPENDS_ON', `doc:${targetId}`, 'frontmatter', { profile: profileId, branch, reason: dep.reason ?? null }));
+    edges.push(edge(`doc:${doc.frontmatter.doc_id}`, 'DEPENDS_ON', `doc:${targetId}`, 'frontmatter', scoped({ reason: dep.reason ?? null }, doc)));
   }
 }
 
@@ -127,7 +128,7 @@ for (const doc of documents.filter(doc => arrayValue(doc.frontmatter.depends_on)
     type: 'MISSING_DEPENDENCY',
     message: `${doc.frontmatter.doc_id} has no depends_on entry.`,
     nodeId: `doc:${doc.frontmatter.doc_id}`,
-    properties: scoped({ docType: doc.frontmatter.doc_type }),
+    properties: scoped({ docType: doc.frontmatter.doc_type }, doc),
   });
 }
 
@@ -322,7 +323,7 @@ function documentNode(doc) {
       owner: doc.frontmatter.owner,
       path: doc.relativePath,
       freshnessStatus: 'FRESH',
-    }),
+    }, doc),
   };
 }
 
@@ -334,8 +335,17 @@ function issue(severity, code, message, nodeId) {
   return { id: `issue:${hash(`${severity}:${code}:${message}:${nodeId}`)}`, severity, code, message, nodeId, edgeId: null, properties: scoped({}) };
 }
 
-function scoped(properties) {
-  return { ...properties, workspaceId, applicationId, snowGroup, projectId, profile: profileId, branch };
+function scoped(properties, doc = null) {
+  const frontmatter = doc?.frontmatter ?? {};
+  return {
+    ...properties,
+    workspaceId: frontmatter.workspace_id ?? workspaceId,
+    applicationId: frontmatter.application_id ?? applicationId,
+    snowGroup: frontmatter.snow_group ?? snowGroup,
+    projectId: frontmatter.project_id ?? projectId,
+    profile: frontmatter.profile ?? profileId,
+    branch,
+  };
 }
 
 function arrayValue(value) {

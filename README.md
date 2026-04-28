@@ -30,18 +30,32 @@ HK-HCC Agentic SDLC SDD Markdown repository.
 ## Sync From SDD Repo
 
 ```bash
-npm run sync -- --source ../hk-hcc-agentic-sdlc-sdd --workspace ws-default-001 --application agentic-sdlc-control-tower
+npm run sync:sdd
 ```
 
 Optional identifiers:
 
 ```bash
 npm run sync -- \
-  --source ../hk-hcc-agentic-sdlc-sdd \
+  --source ../hk-hcc-agentic-sdlc-sdd/docs/standard-sdd/projects/control-tower \
   --workspace ws-default-001 \
   --application agentic-sdlc-control-tower \
-  --project proj-42 \
+  --profile standard-sdd \
+  --project control-tower \
   --snow-group "SDLC Platform"
+```
+
+For a new project, point `--source` at that project folder and pass the same
+`--project` ID used in document front matter:
+
+```bash
+npm run sync -- \
+  --source ../hk-hcc-agentic-sdlc-sdd/docs/ibm-i/projects/new-project \
+  --profile ibm-i \
+  --workspace ws-default-001 \
+  --application hk-hcc \
+  --project new-project \
+  --snow-group HK-HCC
 ```
 
 For HK-HCC IBM i validation:
@@ -58,9 +72,10 @@ The sync writes:
 - `_graph/issues.jsonl`
 - `_graph/suggestions.jsonl`
 
-When a source repository contains multiple profiles, the sync includes documents
-with matching `profile` front matter and skips documents that explicitly belong
-to another profile.
+When a source repository contains multiple profiles or projects, the sync
+includes documents with matching `profile` front matter and, when `--project`
+is provided, documents with matching `project_id` front matter. Documents
+without `project_id` inherit the command-line `--project` value.
 
 ## Artifact Contract
 
