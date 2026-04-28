@@ -1,14 +1,14 @@
 {
   "schemaVersion": "1.0",
-  "runId": "skg-sync-20260428T115606",
-  "generatedAt": "2026-04-28T11:56:06.669Z",
+  "runId": "skg-sync-20260428T125928",
+  "generatedAt": "2026-04-28T12:59:28.748Z",
   "workspaceId": "ws-default-001",
   "applicationId": "hk-hcc",
   "snowGroup": "HK-HCC",
   "projectId": "hk-hcc-core",
   "profileId": "ibm-i",
   "branch": "main",
-  "sourceCommitSha": "98aa9e12d78061d3025f0063070645fcd7217680",
+  "sourceCommitSha": "a6dd6e2cc7faf836c2b302ac1b8490f42aa61408",
   "artifacts": {
     "nodes": "_graph/ibm-i/hk-hcc-core/nodes.jsonl",
     "edges": "_graph/ibm-i/hk-hcc-core/edges.jsonl",
@@ -16,19 +16,19 @@
     "suggestions": "_graph/ibm-i/hk-hcc-core/suggestions.jsonl"
   },
   "counts": {
-    "documents": 0,
-    "nodes": 0,
-    "edges": 0,
+    "documents": 5,
+    "nodes": 8,
+    "edges": 9,
     "issues": 0,
     "suggestions": 0
   },
   "stale": false,
   "lastSync": {
-    "runId": "skg-sync-20260428T115606",
+    "runId": "skg-sync-20260428T125928",
     "status": "COMPLETED",
-    "sourceCommitSha": "98aa9e12d78061d3025f0063070645fcd7217680",
+    "sourceCommitSha": "a6dd6e2cc7faf836c2b302ac1b8490f42aa61408",
     "structuredCommitSha": null,
-    "startedAt": "2026-04-28T11:56:06.669Z",
-    "completedAt": "2026-04-28T11:56:06.669Z"
+    "startedAt": "2026-04-28T12:59:28.748Z",
+    "completedAt": "2026-04-28T12:59:28.748Z"
   }
 }
